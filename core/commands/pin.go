@@ -183,6 +183,9 @@ Example:
 `,
 	},
 
+	Arguments: []cmds.Argument{
+		cmds.StringArg("ipfs-path", false, true, "Path to object(s) to be listed").EnableStdin(),
+	},
 	Options: []cmds.Option{
 		cmds.StringOption("type", "t", "The type of pinned keys to list. Can be \"direct\", \"indirect\", \"recursive\", or \"all\". Defaults to \"recursive\""),
 		cmds.BoolOption("count", "n", "Show refcount when listing indirect pins"),
@@ -212,12 +215,17 @@ Example:
 		}
 
 		keys := make(map[string]RefKeyObject)
-		if typeStr == "direct" || typeStr == "all" {
-			for _, k := range n.Pinning.DirectKeys() {
+
+		AddToResultKeys := func (keyList []key.Key, typeStr string) {
+			for _, k := range keyList {
 				keys[k.B58String()] = RefKeyObject{
-					Type: "direct",
+					Type: typeStr,
 				}
 			}
+		}
+
+		if typeStr == "direct" || typeStr == "all" {
+			AddToResultKeys(n.Pinning.DirectKeys(), "direct")
 		}
 		if typeStr == "indirect" || typeStr == "all" {
 			ks := key.NewKeySet()
@@ -232,20 +240,11 @@ Example:
 					res.SetError(err, cmds.ErrNormal)
 					return
 				}
-
 			}
-			for _, k := range ks.Keys() {
-				keys[k.B58String()] = RefKeyObject{
-					Type: "indirect",
-				}
-			}
+			AddToResultKeys(ks.Keys(), "indirect")
 		}
 		if typeStr == "recursive" || typeStr == "all" {
-			for _, k := range n.Pinning.RecursiveKeys() {
-				keys[k.B58String()] = RefKeyObject{
-					Type: "recursive",
-				}
-			}
+			AddToResultKeys(n.Pinning.RecursiveKeys(), "recursive")
 		}
 
 		res.SetOutput(&RefKeyList{Keys: keys})
