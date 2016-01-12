@@ -7,8 +7,10 @@ import (
 
 	key "github.com/ipfs/go-ipfs/blocks/key"
 	cmds "github.com/ipfs/go-ipfs/commands"
+	core "github.com/ipfs/go-ipfs/core"
 	corerepo "github.com/ipfs/go-ipfs/core/corerepo"
 	dag "github.com/ipfs/go-ipfs/merkledag"
+	path "github.com/ipfs/go-ipfs/path"
 	u "github.com/ipfs/go-ipfs/util"
 )
 
@@ -184,7 +186,7 @@ Example:
 	},
 
 	Arguments: []cmds.Argument{
-		cmds.StringArg("ipfs-path", false, true, "Path to object(s) to be listed").EnableStdin(),
+		cmds.StringArg("ipfs-path", false, true, "Path to object(s) to be listed"),
 	},
 	Options: []cmds.Option{
 		cmds.StringOption("type", "t", "The type of pinned keys to list. Can be \"direct\", \"indirect\", \"recursive\", or \"all\". Defaults to \"recursive\""),
@@ -214,7 +216,42 @@ Example:
 			res.SetError(err, cmds.ErrClient)
 		}
 
+		argCount := len(req.Arguments())
+
 		keys := make(map[string]RefKeyObject)
+
+		if (argCount > 0) {
+
+			for _, p := range req.Arguments() {
+				dagNode, err := core.Resolve(req.Context(), n, path.Path(p))
+
+				if err != nil {
+					res.SetError(err, cmds.ErrNormal)
+					return
+				}
+
+				k, err := dagNode.Key()
+				if err != nil {
+					res.SetError(err, cmds.ErrNormal)
+					return
+				}
+
+				pinType, pinned, err := n.Pinning.IsPinned(k)
+				if err != nil {
+					res.SetError(err, cmds.ErrNormal)
+					return
+				}
+
+				if (pinned && pinType == typeStr) {
+					keys[k.B58String()] = RefKeyObject{
+						Type: typeStr,
+					}
+				}
+			}
+
+			res.SetOutput(&RefKeyList{Keys: keys})
+			return
+		}
 
 		AddToResultKeys := func (keyList []key.Key, typeStr string) {
 			for _, k := range keyList {
