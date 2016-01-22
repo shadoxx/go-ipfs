@@ -248,16 +248,25 @@ Example:
 				return nil, err
 			}
 
+			count, _, err := res.Request().Option("count").Bool()
+			if err != nil {
+				return nil, err
+			}
+
 			keys, ok := res.Output().(*RefKeyList)
 			if !ok {
 				return nil, u.ErrCast()
 			}
 			out := new(bytes.Buffer)
-			for k, v := range keys.Keys {
-				if quiet {
-					fmt.Fprintf(out, "%s\n", k)
-				} else {
-					fmt.Fprintf(out, "%s %s\n", k, v.Type)
+			if count {
+				fmt.Fprintf(out, "%d\n", len(keys.Keys))
+			} else {
+				for k, v := range keys.Keys {
+					if quiet {
+						fmt.Fprintf(out, "%s\n", k)
+					} else {
+						fmt.Fprintf(out, "%s %s\n", k, v.Type)
+					}
 				}
 			}
 			return out, nil

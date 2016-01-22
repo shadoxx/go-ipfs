@@ -119,9 +119,20 @@ test_expect_success "ipfs object links $HASH_DIR1 works" '
 	ipfs object links $HASH_DIR1 > DIR1_objlink
 '
 
-
 test_expect_success "added dir was pinned recursively" '
 	test_pin_flag $HASH_DIR1 recursive true
+'
+
+test_expect_success "'ipfs pin ls --count' works" '
+	ipfs pin ls --count --type=all >actual_all &&
+	ipfs pin ls --count --type=recursive >actual_recursive
+'
+
+test_expect_success "'ipfs pin ls --count' output looks good" '
+	echo "18" >expected_all &&
+	echo "3" >expected_recursive &&
+	test_cmp expected_all actual_all &&
+	test_cmp expected_recursive actual_recursive
 '
 
 test_expect_success "rest were pinned indirectly" '
