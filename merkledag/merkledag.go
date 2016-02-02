@@ -150,11 +150,13 @@ func FindLinks(links []key.Key, k key.Key, start int) []int {
 // It returns a channel of nodes, which the caller can receive
 // all the child nodes of 'root' on, in proper order.
 func (ds *dagService) GetDAG(ctx context.Context, root *Node) []NodeGetter {
-	var keys []key.Key
+	var keys key.KeyList
 	for _, lnk := range root.Links {
 		keys = append(keys, key.Key(lnk.Hash))
 	}
 
+	rootk, _ := root.Key()
+	log.Event(ctx, "getDAG", &rootk, &keys)
 	return ds.GetNodes(ctx, keys)
 }
 
