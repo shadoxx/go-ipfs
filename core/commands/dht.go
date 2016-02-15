@@ -354,8 +354,6 @@ GetValue will return the value stored in the dht at the given key.
 			return
 		}
 
-		log.Error("RESOLVE KEY: ", []byte(dhtkey))
-
 		go func() {
 			defer close(outChan)
 			for e := range events {
