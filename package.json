@@ -31,6 +31,11 @@
       "name": "gogo-protobuf",
       "hash": "QmZ4Qi3GaRbjcx28Sme5eMH7RQjGkt8wHxt2a65oLaeFEV",
       "version": "0.0.0"
+    },
+    {
+      "name": "prometheus",
+      "hash": "QmSH7Koc3CCaB8weo9aDE7YWQuGwAi5G7bqGvxatfux1Y5",
+      "version": "0.7.0"
     }
   ],
   "language": "go",
