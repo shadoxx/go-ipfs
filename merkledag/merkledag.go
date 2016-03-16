@@ -198,7 +198,9 @@ func GetNodes(ctx context.Context, ds DAGService, keys []key.Key) []NodeGetter {
 				}
 
 				if opt.Err != nil {
-					log.Error("error fetching: ", opt.Err)
+					for _, p := range promises {
+						p.Fail(opt.Err)
+					}
 					return
 				}
 
