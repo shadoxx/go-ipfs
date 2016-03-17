@@ -356,8 +356,6 @@ func TestFetchFailure(t *testing.T) {
 		}
 	}
 
-	top.Copy()
-
 	getters := GetDAG(context.Background(), ds, top)
 	for i, getter := range getters {
 		_, err := getter.Get(context.Background())
