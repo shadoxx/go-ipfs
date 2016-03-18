@@ -50,13 +50,13 @@ Publish an <ipfs-path> to another public key (not implemented):
 		cmds.StringArg("ipfs-path", true, false, "IPFS path of the obejct to be published.").EnableStdin(),
 	},
 	Options: []cmds.Option{
-		cmds.BoolOption("resolve", "Resolve given path before publishing (default=true)."),
-		cmds.StringOption("lifetime", "t", `Time duration that the record will be valid for. Default: 24h.
+		cmds.BoolOption("resolve", "Resolve given path before publishing.").Default(true),
+		cmds.StringOption("lifetime", "t", `Time duration that the record will be valid for.
 
     This accepts durations such as "300s", "1.5h" or "2h45m". Valid time units are
     "ns", "us" (or "µs"), "ms", "s", "m", "h".
-		`),
-		cmds.StringOption("ttl", "Time duration this record should be cached for (caution: experimental)."),
+		`).Default("24h"),
+		cmds.StringOption("ttl", "Time duration this record should be cached for (caution: experimental).").Default(false),
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
 		log.Debug("Begin Publish")

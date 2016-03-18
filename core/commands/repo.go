@@ -34,7 +34,7 @@ order to reclaim hard disk space.
 	},
 
 	Options: []cmds.Option{
-		cmds.BoolOption("quiet", "q", "Write minimal output."),
+		cmds.BoolOption("quiet", "q", "Write minimal output.").Default(false),
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
 		n, err := req.InvocContext().GetNode()
@@ -123,7 +123,7 @@ RepoPath        string the path to the repo being currently used
 		res.SetOutput(stat)
 	},
 	Options: []cmds.Option{
-		cmds.BoolOption("human", "Output RepoSize in MiB."),
+		cmds.BoolOption("human", "Output RepoSize in MiB.").Default(false),
 	},
 	Type: corerepo.Stat{},
 	Marshalers: cmds.MarshalerMap{

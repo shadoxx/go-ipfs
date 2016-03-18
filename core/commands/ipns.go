@@ -41,11 +41,12 @@ Resolve the value of another name:
 	},
 
 	Arguments: []cmds.Argument{
-		cmds.StringArg("name", false, false, "The IPNS name to resolve. Defaults to your node's peerID.").EnableStdin(),
+		cmds.StringArg("name", false, false, "The IPNS name to resolve.").EnableStdin().Default("your node's peerID"),
 	},
 	Options: []cmds.Option{
-		cmds.BoolOption("recursive", "r", "Resolve until the result is not an IPNS name."),
-		cmds.BoolOption("nocache", "n", "Do not used cached entries."),
+		cmds.BoolOption("recursive", "r", "Resolve until the result is not an IPNS name.").Default(false),
+		cmds.BoolOption("nocache", "n", "Do not use cached entries.").Default(false),
+		cmds.BoolOption("local", "l", "Use only local entires").Default(false),
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
 

@@ -120,7 +120,7 @@ multihash.
 		cmds.StringArg("key", true, false, "Key of the object to retrieve, in base58-encoded multihash format.").EnableStdin(),
 	},
 	Options: []cmds.Option{
-		cmds.BoolOption("headers", "v", "Print table headers (Hash, Size, Name)."),
+		cmds.BoolOption("headers", "v", "Print table headers (Hash, Size, Name).").Default(false),
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
 		n, err := req.InvocContext().GetNode()
@@ -341,7 +341,7 @@ And then run:
 		cmds.FileArg("data", true, false, "Data to be stored as a DAG object.").EnableStdin(),
 	},
 	Options: []cmds.Option{
-		cmds.StringOption("inputenc", "Encoding type of input data, either \"protobuf\" or \"json\"."),
+		cmds.StringOption("inputenc", "Encoding type of input data. One of: protobuf, json.").Default("json"),
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
 		n, err := req.InvocContext().GetNode()
@@ -403,7 +403,7 @@ Available templates:
 `,
 	},
 	Arguments: []cmds.Argument{
-		cmds.StringArg("template", false, false, "Template to use. Optional."),
+		cmds.StringArg("template", false, false, "Template to use."),
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
 		n, err := req.InvocContext().GetNode()
