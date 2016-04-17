@@ -12,8 +12,8 @@ import (
 	notif "github.com/ipfs/go-ipfs/notifications"
 	path "github.com/ipfs/go-ipfs/path"
 	ipdht "github.com/ipfs/go-ipfs/routing/dht"
-	peer "gx/ipfs/QmNefBbWHR9JEiP3KDVqZsBLQVRmH3GBG2D2Ke24SsFqfW/go-libp2p/p2p/peer"
 	u "gx/ipfs/QmZNVWh8LLjAavuQ2JXuFmuYH3C11xo988vSgp7UQrTRj1/go-ipfs-util"
+	peer "gx/ipfs/QmccGfZs3rzku8Bv6sTPH3bMUKD1EVod8srgRjt5csdmva/go-libp2p/p2p/peer"
 )
 
 var ErrNotDHT = errors.New("routing service is not a DHT")
@@ -573,7 +573,7 @@ func escapeDhtKey(s string) (key.Key, error) {
 		return key.B58KeyDecode(s), nil
 	case 3:
 		k := key.B58KeyDecode(parts[2])
-		return key.Key(path.Join(append(parts[:2], k.String()))), nil
+		return key.Key(path.Join(append(parts[:2], string(k)))), nil
 	default:
 		return "", errors.New("invalid key")
 	}

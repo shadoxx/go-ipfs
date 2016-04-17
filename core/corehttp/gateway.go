@@ -8,7 +8,7 @@ import (
 
 	core "github.com/ipfs/go-ipfs/core"
 	config "github.com/ipfs/go-ipfs/repo/config"
-	id "gx/ipfs/QmNefBbWHR9JEiP3KDVqZsBLQVRmH3GBG2D2Ke24SsFqfW/go-libp2p/p2p/protocol/identify"
+	id "gx/ipfs/QmccGfZs3rzku8Bv6sTPH3bMUKD1EVod8srgRjt5csdmva/go-libp2p/p2p/protocol/identify"
 )
 
 // Gateway should be instantiated using NewGateway
@@ -17,9 +17,10 @@ type Gateway struct {
 }
 
 type GatewayConfig struct {
-	Headers   map[string][]string
-	BlockList *BlockList
-	Writable  bool
+	Headers      map[string][]string
+	BlockList    *BlockList
+	Writable     bool
+	PathPrefixes []string
 }
 
 func NewGateway(conf GatewayConfig) *Gateway {
@@ -48,10 +49,11 @@ func (g *Gateway) ServeOption() ServeOption {
 	}
 }
 
-func GatewayOption(writable bool) ServeOption {
+func GatewayOption(writable bool, prefixes []string) ServeOption {
 	g := NewGateway(GatewayConfig{
-		Writable:  writable,
-		BlockList: &BlockList{},
+		Writable:     writable,
+		BlockList:    &BlockList{},
+		PathPrefixes: prefixes,
 	})
 	return g.ServeOption()
 }
